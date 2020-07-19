@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const db = require("./config/mongoose");
 
 const port = 8000;
 

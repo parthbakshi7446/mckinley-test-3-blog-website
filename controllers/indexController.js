@@ -1,13 +1,18 @@
 const lodash = require("lodash");
 const data  = require("../assets/data");
+const Post = require("../models/post");
 
-let posts = [];
+// let posts = [];
 
 module.exports.home = function(req, res){
-    res.render("home", {
-    startingContent: data.homeContent,
-    posts: posts
+    Post.find({},function(err,posts){
+        if(err){console.log("err"+err);}
+        return res.render("home", {
+            startingContent: data.homeContent,
+            posts: posts
+        });
     });
+    
 }
 
 module.exports.about = function(req, res){
@@ -23,28 +28,22 @@ module.exports.composePage = function(req, res){
 }
 
 module.exports.savePost = function(req, res){
-    const post = {
+    Post.create({
         title: req.body.postTitle,
         content: req.body.postBody
-    };
-
-    posts.push(post);
+    },function(err,post){
+        if(err){console.log("err"+err);}
+    });
 
     res.redirect("/");
-
 }
 
 module.exports.getPost = function(req, res){
-    const requestedTitle = lodash.lowerCase(req.params.postName);
-
-    posts.forEach(function(post){
-        const storedTitle = lodash.lowerCase(post.title);
-
-        if (storedTitle === requestedTitle) {
-            res.render("post", {
-                title: post.title,
-                content: post.content
-            });
-        }
+    Post.findOne({_id: req.params.postId}, function(err, post){
+        if(err){console.log("err"+err);}
+        res.render("post", {
+            title: post.title,
+            content: post.content
+        });
     });
 }

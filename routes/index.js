@@ -14,5 +14,5 @@ router.get("/compose", indexController.composePage);
 
 router.post("/compose", indexController.savePost);
 
-router.get("/posts/:postName", indexController.getPost);
+router.get("/posts/:postId", indexController.getPost);
 
